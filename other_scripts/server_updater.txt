@@ -1,0 +1,6 @@
+// Set the directory where A3 is/will be installed
+force_install_dir /home/arma/a3server
+// Install or update the files for App ID 233780, the A3 server
+app_update 233780 validate
+// Exit the Steam shell
+quit

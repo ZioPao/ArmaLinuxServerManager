@@ -1,0 +1,1 @@
+./arma3server -name=server_test -config=cfg/server_test.cfg -mod=mods/@cba\;mods/@ace3\;

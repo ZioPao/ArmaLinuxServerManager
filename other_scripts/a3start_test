@@ -1,0 +1,1 @@
+./arma3server -name=server_viet -config=server_test.cfg -mod=mods/@cba_a3\;mods/@ace3\;mods/@TFAR\;mods/@Bloodlust\;mods/@EnhancedMovement\;mods/@RHSAFRF\;mods/@RHSGREF\;mods/@RHSUSAF\;mods/@ace_compat_afrf\;mods/@ace_compat_gref\;mods/@ace_compat_usaf\;mods/@ShackTacUI\;mods/@ACE_ext\;mods/@VE_RFX\

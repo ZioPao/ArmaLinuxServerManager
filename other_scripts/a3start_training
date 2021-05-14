@@ -1,0 +1,1 @@
+./arma3server -name=server -config=server_training.cfg -mod=mods/@cba_a3\;mods/@ace3\;mods/@TFAR\;mods/@Bloodlust\;mods/@EnhancedMovement\;mods/@RHSAFRF\;mods/@RHSGREF\;mods/@RHSUSAF\;mods/@ace_compat_afrf\;mods/@ace_compat_gref\;mods/@ace_compat_usaf\;mods/@ShackTacUI\;mods/@TacticalBeards\;mods/@ACE_ext\
