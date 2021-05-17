@@ -21,6 +21,8 @@ class Cnst:
         key = Fernet.generate_key()
         fernet = Fernet(key)
 
+        print("\n\n\nNon è stato trovato il file contenente l'utente Steam. Inseriscilo ora.\n")
+
         username_tmp = bytes(input('Inserisci username di Steam: '), encoding='utf8')
         password_tmp = bytes(input('Inserisci password di Steam: '), encoding='utf8')
         CREDENTIALS = fernet.encrypt(username_tmp + b" " + password_tmp)
