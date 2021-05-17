@@ -80,6 +80,7 @@ def manage_mods_list(mods):
     # Creates a temp file to use with steamcmd and creates a symlink
 
     fp = open(Cnst.SCRIPTS_FOLDER + "mods.txt", "w+")
+    fp.write('@NoPromptForPassword 1\nlogin ' + str(Cnst.CREDENTIALS) + '\n')
 
     for tupla in mods:
         # Add the new string to a temp file
