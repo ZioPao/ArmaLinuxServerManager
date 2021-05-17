@@ -9,7 +9,6 @@ import pickle
 
 # Constants
 class Cnst:
-
     try:
         with open('creds.bin', 'rb') as fp:
             ENC_CREDENTIALS = pickle.load(fp)
@@ -20,10 +19,10 @@ class Cnst:
         key = Fernet.generate_key()
         fernet = Fernet(key)
 
-        print("\n\n\nNon è stato trovato il file contenente l'utente Steam. Inseriscilo ora.\n")
+        print("\n\n\nNon Ã¨ stato trovato il file contenente l'utente Steam. Inseriscilo ora.\n")
 
-        username_tmp = bytes(input('Inserisci username di Steam: '), encoding='utf8')
-        password_tmp = bytes(input('Inserisci password di Steam: '), encoding='utf8')
+        username_tmp = input('Inserisci username di Steam: ')
+        password_tmp = input('Inserisci password di Steam: ')
 
         CREDENTIALS = str(username_tmp) + " " + str(password_tmp)
         ENC_CREDENTIALS = fernet.encrypt(CREDENTIALS.encode())
@@ -33,7 +32,7 @@ class Cnst:
 
     GAME_ID = "107410"
     SERVER_ID = "233780"
-    
+
     GAME_FOLDER = "/home/arma/a3server/"
     GAME_MODS_FOLDER = GAME_FOLDER + "mods/"
     GAME_MISSIONS_FOLDER = GAME_FOLDER + "mpmissions/"
@@ -70,7 +69,6 @@ update_mods += ["validate", "+quit"]
 
 
 def run_steamcmd(script):
-
     os.chdir(Cnst.STEAM_FOLDER)
     subprocess.call(Cnst.CALL_STEAMCMD + [script])
 
@@ -83,8 +81,8 @@ def manage_mods_list(mods):
 
     for tupla in mods:
         # Add the new string to a temp file
-        mod_id = str(tupla[0])         # mod id from the workshop
-        mod_name = str(tupla[1])        # custom name for the symlink
+        mod_id = str(tupla[0])  # mod id from the workshop
+        mod_name = str(tupla[1])  # custom name for the symlink
         cmd_mod = "workshop_download_item " + Cnst.GAME_ID + " " + mod_id + " validate\n"
         fp.write(cmd_mod)
 
@@ -109,6 +107,7 @@ def fix_uppercase(dir_path):
             print(path_new)
             os.rename(path_old, path_new)
 
+
 ####################################################################################################################
 
 # TODO meccanismo di backup
@@ -118,9 +117,11 @@ def fix_uppercase(dir_path):
 choice = 0
 
 print('\n\n\n')
-print(Colors.BOLD + "========================================================\n\tMANAGER SERVER\n========================================================" + Colors.ENDC)
+print(
+    Colors.BOLD + "========================================================\n\tMANAGER SERVER\n========================================================" + Colors.ENDC)
 while choice != 6:
-    print("1) Start server\n2) Aggiorna server\n3) Aggiungi setup missione\n4) Aggiorna mods\n5) Aggiorna mod specifica\n6) Esci")
+    print(
+        "1) Start server\n2) Aggiorna server\n3) Aggiungi setup missione\n4) Aggiorna mods\n5) Aggiorna mod specifica\n6) Esci")
     choice = int(input("Scegli un'opzione: "))
     print("\n")
 
@@ -150,10 +151,10 @@ while choice != 6:
 
     # Update server
     if choice == 2:
-
         # generate script for a split second and deletes it. Really wonky but I don't care
         fp_upd = open(Cnst.SCRIPTS_FOLDER + "s_upd.txt", 'w')
-        fp_upd.write('@ShutdownOnFailedCommand 1\n@NoPromptForPassword 1\nlogin ' + Cnst.CREDENTIALS + "\nforce_install_dir " + Cnst.GAME_FOLDER + "\napp_update " + Cnst.SERVER_ID + " validate\nquit")
+        fp_upd.write(
+            '@ShutdownOnFailedCommand 1\n@NoPromptForPassword 1\nlogin ' + Cnst.CREDENTIALS + "\nforce_install_dir " + Cnst.GAME_FOLDER + "\napp_update " + Cnst.SERVER_ID + " validate\nquit")
         script = "+runscript " + Cnst.SCRIPTS_FOLDER + "s_upd.txt"
         run_steamcmd(script)
         os.remove(Cnst.SCRIPTS_FOLDER + "s_upd.txt")
@@ -168,7 +169,7 @@ while choice != 6:
         for mission in mission_list:
             print(str(index) + ") " + mission)
             index += 1
-        
+
         print(str(index) + ") Missione aggiuntiva")
         mission_choice = int(input("Scegli una missione da aggiungere: "))
 
@@ -178,9 +179,8 @@ while choice != 6:
         else:
             mission_name = mission_list[mission_choice - 1]
 
-
         # Open the default cfg and copy it in cfg
-        #TODO Add it
+        # TODO Add it
         fp_default = open("", "r")
         default_cfg = fp_default.read()
         fp_default.close()
@@ -188,37 +188,35 @@ while choice != 6:
         # Create a new custom file for the cfg
         startup_file_name = str(input("Inserire nome nuova istanza: "))
 
-        fp_new_cfg = open("..", "w")        
+        fp_new_cfg = open("..", "w")
         fp_new_cfg.write(default_cfg)
         fp_new_cfg.close()
 
         # Choosing the mods for this instance
 
-        #TODO Prints a list of the currently downloaded mods
+        # TODO Prints a list of the currently downloaded mods
 
     # Update mods
     if choice == 4:
-        
         manage_mods_list(modslibrary.mods)
         script = "+runscript " + Cnst.SCRIPTS_FOLDER + "mods.txt"
         run_steamcmd(script)
-        os.remove(Cnst.SCRIPTS_FOLDER + "mods.txt")     # Just to clear stuff
+        os.remove(Cnst.SCRIPTS_FOLDER + "mods.txt")  # Just to clear stuff
         fix_uppercase(Cnst.STEAM_MODS_FOLDER)
 
     # Update single mod
     if choice == 5:
-
         mod_id = int(input("Inserire id mod: "))
-        mod_name = str(input("Inserire nome mod: "))    # used raw_input before, not sure why. Probably older python?
+        mod_name = str(input("Inserire nome mod: "))  # used raw_input before, not sure why. Probably older python?
         temp_list = [(mod_id, mod_name,)]
         manage_mods_list(temp_list)
         script = "+runscript " + Cnst.SCRIPTS_FOLDER + "mods.txt"
         run_steamcmd(script)
-        os.remove(Cnst.SCRIPTS_FOLDER + "mods.txt")     # Just to clear stuff
+        os.remove(Cnst.SCRIPTS_FOLDER + "mods.txt")  # Just to clear stuff
         fix_uppercase(Cnst.STEAM_MODS_FOLDER + str(mod_id))
 
     # Quit the manager
     if choice == 6:
         quit()
-    
+
     print("\n")
