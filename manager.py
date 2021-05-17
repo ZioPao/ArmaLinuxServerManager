@@ -25,9 +25,12 @@ class Cnst:
 
         username_tmp = bytes(input('Inserisci username di Steam: '), encoding='utf8')
         password_tmp = bytes(input('Inserisci password di Steam: '), encoding='utf8')
-        CREDENTIALS = fernet.encrypt(username_tmp + b" " + password_tmp)
+
+        CREDENTIALS = str(username_tmp) + " " + str(password_tmp)
+        ENC_CREDENTIALS = fernet.encrypt(username_tmp + b" " + password_tmp)
+
         with open('creds.bin', 'wb') as fp:
-            pickle.dump([CREDENTIALS, key], fp)
+            pickle.dump([ENC_CREDENTIALS, key], fp)
 
     GAME_ID = "107410"
     SERVER_ID = "233780"
