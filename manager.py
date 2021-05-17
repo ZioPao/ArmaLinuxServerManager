@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 import subprocess
 import os
@@ -15,7 +14,7 @@ class Cnst:
         with open('creds.bin', 'rb') as fp:
             ENC_CREDENTIALS = pickle.load(fp)
             fernet = Fernet(ENC_CREDENTIALS[1])
-            CREDENTIALS = fernet.decrypt(ENC_CREDENTIALS[0])
+            CREDENTIALS = fernet.decrypt(ENC_CREDENTIALS[0]).decode()
 
     except FileNotFoundError:
         key = Fernet.generate_key()
@@ -27,7 +26,7 @@ class Cnst:
         password_tmp = bytes(input('Inserisci password di Steam: '), encoding='utf8')
 
         CREDENTIALS = str(username_tmp) + " " + str(password_tmp)
-        ENC_CREDENTIALS = fernet.encrypt(username_tmp + b" " + password_tmp)
+        ENC_CREDENTIALS = fernet.encrypt(CREDENTIALS.encode())
 
         with open('creds.bin', 'wb') as fp:
             pickle.dump([ENC_CREDENTIALS, key], fp)
@@ -154,7 +153,7 @@ while choice != 6:
 
         # generate script for a split second and deletes it. Really wonky but I don't care
         fp_upd = open(Cnst.SCRIPTS_FOLDER + "s_upd.txt", 'w')
-        fp_upd.write('@ShutdownOnFailedCommand 1\n@NoPromptForPassword 1\nlogin ' + Cnst.CREDENTIALS.decode() + "\nforce_install_dir " + Cnst.GAME_FOLDER + "\napp_update " + Cnst.SERVER_ID + " validate\nquit")
+        fp_upd.write('@ShutdownOnFailedCommand 1\n@NoPromptForPassword 1\nlogin ' + Cnst.CREDENTIALS + "\nforce_install_dir " + Cnst.GAME_FOLDER + "\napp_update " + Cnst.SERVER_ID + " validate\nquit")
         script = "+runscript " + Cnst.SCRIPTS_FOLDER + "s_upd.txt"
         run_steamcmd(script)
         os.remove(Cnst.SCRIPTS_FOLDER + "s_upd.txt")
